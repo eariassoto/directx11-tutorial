@@ -115,10 +115,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="d3dhandler.cpp" />
+    <ClCompile Include="graphicsmanager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="simplewindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="d3dhandler.h" />
+    <ClInclude Include="graphicsmanager.h" />
     <ClInclude Include="simplewindow.h" />
     <ClInclude Include="simplewindowsettings.h" />
   </ItemGroup>

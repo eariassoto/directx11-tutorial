@@ -1,4 +1,5 @@
 #include "simplewindow.h"
+#include "graphicsmanager.h"
 
 static SimpleWindow* applicationHandle = nullptr;
 
@@ -16,8 +17,14 @@ SimpleWindow::~SimpleWindow() {}
 
 bool SimpleWindow::Initialize()
 {
-	// Initialize the windows api.
 	InitializeWindows();
+
+	mGraphicsManager = new GraphicsManager(mWindowSettings);
+	if (!mGraphicsManager->Initialize(mHwnd))
+	{
+		// TODO: log error?
+		return false;
+	}
 
 	return true;
 }
@@ -25,6 +32,13 @@ bool SimpleWindow::Initialize()
 void SimpleWindow::Shutdown()
 {
 	ShutdownWindows();
+
+	if (mGraphicsManager)
+	{
+		mGraphicsManager->Shutdown();
+		delete mGraphicsManager;
+		mGraphicsManager = nullptr;
+	}
 }
 
 void SimpleWindow::Run()
@@ -65,6 +79,11 @@ bool SimpleWindow::Frame()
 	{
 		return false;
 	}
+
+	if (!mGraphicsManager->Frame())
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -95,23 +114,18 @@ void SimpleWindow::InitializeWindows()
 
 	RegisterWindowsClass();
 
-	int posX = mWindowSettings.mWindowPosX;
-	int posY = mWindowSettings.mWindowPosY;
-	int winWidth = mWindowSettings.mWindowWidth;
-	int winHeight = mWindowSettings.mWindowHeight;
-
 	if (mWindowSettings.mFullscreenMode)
 	{
 		ChangeDisplayMode(DisplayMode::FULLSCREEN);
-		posX = 0;
-		posY = 0;
-		winWidth = GetSystemMetrics(SM_CXSCREEN);
-		winHeight = GetSystemMetrics(SM_CYSCREEN);
+		mWindowSettings.mWindowPosX = 0;
+		mWindowSettings.mWindowPosY = 0;
+		mWindowSettings.mWindowWidth = GetSystemMetrics(SM_CXSCREEN);
+		mWindowSettings.mWindowHeight = GetSystemMetrics(SM_CYSCREEN);
 	}
 	else if(mWindowSettings.mScreenCentered)
 	{
-		posX = (GetSystemMetrics(SM_CXSCREEN) - mWindowSettings.mWindowWidth) / 2;
-		posY = (GetSystemMetrics(SM_CYSCREEN) - mWindowSettings.mWindowHeight) / 2;
+		mWindowSettings.mWindowPosX = (GetSystemMetrics(SM_CXSCREEN) - mWindowSettings.mWindowWidth) / 2;
+		mWindowSettings.mWindowPosY = (GetSystemMetrics(SM_CYSCREEN) - mWindowSettings.mWindowHeight) / 2;
 	}
 
 	long int windowStyle = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
@@ -128,10 +142,10 @@ void SimpleWindow::InitializeWindows()
 		mWindowSettings.mWindowClass,
 		mWindowSettings.mWindowName,
 		windowStyle,
-		posX,
-		posY,
-		winWidth,
-		winHeight,
+		mWindowSettings.mWindowPosX,
+		mWindowSettings.mWindowPosY,
+		mWindowSettings.mWindowWidth,
+		mWindowSettings.mWindowHeight,
 		NULL,
 		NULL,
 		mHinstance,

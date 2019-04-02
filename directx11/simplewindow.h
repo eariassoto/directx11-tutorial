@@ -43,6 +43,7 @@ private:
 	HWND mHwnd;
 	bool mIsEscKeyPressed = false;
 	SimpleWindowSettings mWindowSettings;
+	GraphicsManager *mGraphicsManager = nullptr;
 };
 
 #endif // _SIMPLE_WINDOW_H_
