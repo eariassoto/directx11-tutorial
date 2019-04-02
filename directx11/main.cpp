@@ -21,27 +21,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline,
 			}
 		}
 	}
-	// Free memory allocated for CommandLineToArgvW arguments.
 	LocalFree(szArglist);
 
-	SimpleWindow* myWindow;
-	bool result;
-
-	// Create the system object.
-	myWindow = new SimpleWindow(windowArgs);
+	SimpleWindow* myWindow = new SimpleWindow(windowArgs);
 	if (!myWindow)
 	{
 		return 0;
 	}
 
-	// Initialize and run the system object.
-	result = myWindow->Initialize();
-	if (result)
+	if (myWindow->Initialize())
 	{
 		myWindow->Run();
 	}
 
-	// Shutdown and release the system object.
 	myWindow->Shutdown();
 	delete myWindow;
 	return 0;
