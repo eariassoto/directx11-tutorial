@@ -26,5 +26,8 @@
     <ClInclude Include="simplewindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="simplewindowsettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,6 +3,9 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include "simplewindowsettings.h"
+
+class GraphicsManager;	
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -11,19 +14,7 @@ enum class DisplayMode {
 	DEFAULT
 };
 
-struct SimpleWindowSettings
-{
-	LPCWSTR mWindowClass = L"WindowClass";
-	LPCWSTR mWindowName = L"My Window";
-	int mWindowWidth = 800;
-	int mWindowHeight = 600;
-	int mWindowPosX = 0;
-	int mWindowPosY = 0;
-	bool mFullscreenMode = false;
-	bool mScreenCentered = true;
-	bool mBorderlessWindow = false;
-	bool mShowCursor = true;
-};
+
 
 class SimpleWindow;
 static SimpleWindow* GetWindowReference();
